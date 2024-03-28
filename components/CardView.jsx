@@ -6,18 +6,19 @@ import Card from './Card'
 
 const CardView = ({ height, width, panGesture, cardAnimatedStyles }) => {
   return (
-    <View style={[styles.container, { minHeight: height }]}>
-      {plansData.map((plan, index) => (
-        <GestureDetector key={plan.id} gesture={panGesture}>
+    <GestureDetector gesture={panGesture}>
+      <View style={[styles.container, { minHeight: height }]}>
+        {plansData.map((plan, index) => (
           <Animated.View
+            key={plan.id}
             renderToHardwareTextureAndroid // <- this animates borderRadius correctly on older android versions
             style={[{ height: height, width: width, position: 'absolute' }, cardAnimatedStyles[index]]}
           >
             <Card {...plan} height={height} width={width} />
           </Animated.View>
-        </GestureDetector>
-      ))}
-    </View>
+        ))}
+      </View>
+    </GestureDetector>
   )
 }
 

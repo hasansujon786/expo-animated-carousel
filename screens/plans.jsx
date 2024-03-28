@@ -1,6 +1,6 @@
 import Constants from 'expo-constants'
 import { useState } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Directions, Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   Extrapolation,
@@ -28,7 +28,7 @@ export default function Plans() {
   const [curListIndex, setCurListIndex] = useState(0)
 
   const onContinue = () => {
-    console.log(curListIndex)
+    Alert.alert(`planIndex : ${curListIndex}`)
   }
 
   const activeIndex = useSharedValue(0)
@@ -67,7 +67,7 @@ export default function Plans() {
         twoZindex.value = -100
       }
 
-      if (activeIndex.value == 2) {
+      if (absoluteIndex.value >= 2) {
         // next reset
         activeIndex.value = withTiming(0, { duration: 300 })
         absoluteIndex.value = 0
@@ -108,7 +108,7 @@ export default function Plans() {
         oneZindex.value = -100
       }
 
-      if (activeIndex.value == 0) {
+      if (absoluteIndex.value <= 0) {
         // previous reset
         activeIndex.value = withTiming(2, { duration: 300 })
         absoluteIndex.value = 2
@@ -187,7 +187,7 @@ export default function Plans() {
     })
     .onEnd(() => {
       if (position.value > SLIDE_RANGE) {
-        if (activeIndex.value == 0) {
+        if (absoluteIndex.value <= 0) {
           // previous reset
           activeIndex.value = withTiming(2, { duration: 300 })
           absoluteIndex.value = 2
@@ -199,7 +199,7 @@ export default function Plans() {
 
         runOnJS(setCurListIndex)(absoluteIndex.value)
       } else if (position.value * -1 > SLIDE_RANGE) {
-        if (activeIndex.value == 2) {
+        if (absoluteIndex.value >= 2) {
           // next reset
           activeIndex.value = withTiming(0, { duration: 300 })
           absoluteIndex.value = 0
@@ -272,7 +272,7 @@ export default function Plans() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AnimatedRadialBg theme={plansData[curListIndex].theme} background={APP_BG}>
+      <AnimatedRadialBg theme={plansData[curListIndex]?.theme} background={APP_BG}>
         <Text style={styles.topHeading}>Choissisez un plan</Text>
         <Text style={styles.topSubtitle}>Swiper les differentes cartes afin de choisir le plan qui vous conviens</Text>
 
